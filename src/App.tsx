@@ -1,26 +1,32 @@
+// import { createRoot } from 'react-dom/client'
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Canvas, MeshProps, useFrame } from '@react-three/fiber'
+
+function RotatingBox() {
+  const myMesh = React.useRef<MeshProps>()
+  useFrame(({ clock }: any) => {
+      myMesh.current!.rotation.x = clock.getElapsedTime()
+  })
+  return (
+    <mesh ref={myMesh}>
+      <boxGeometry args={[2, 2, 2]} />
+      <meshStandardMaterial />
+    </mesh>
+  )
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="canvas-container">
+      <Canvas>
+        <ambientLight intensity={0.1} />
+        <directionalLight color="red" position={[0, 0, 5]} />
+        <RotatingBox />
+      </Canvas>
     </div>
-  );
+  )
 }
+
+// createRoot(document.getElementById('root')).render(<App />)
 
 export default App;
